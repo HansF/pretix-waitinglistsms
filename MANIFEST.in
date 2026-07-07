@@ -1,0 +1,3 @@
+recursive-include pretix_waitinglistsms/templates *
+recursive-include pretix_waitinglistsms/locale *
+include LICENSE

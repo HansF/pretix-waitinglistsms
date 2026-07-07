@@ -1,0 +1,4 @@
+[plugin]
+package = "pretix-waitinglistsms"
+module = "pretix_waitinglistsms"
+marketplace_name = "waiting-list-sms"

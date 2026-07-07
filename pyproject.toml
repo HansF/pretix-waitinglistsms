@@ -1,0 +1,42 @@
+[project]
+name = "pretix-waitinglistsms"
+dynamic = ["version"]
+description = "Send SMS notifications when pretix waiting list vouchers are assigned."
+readme = "README.rst"
+license = {text = "GPL-3.0-or-later"}
+keywords = ["pretix", "sms", "waiting-list"]
+authors = [
+    {name = "Hans Fraiponts", email = "fraiponts@gmail.com"},
+]
+maintainers = [
+    {name = "Hans Fraiponts", email = "fraiponts@gmail.com"},
+]
+dependencies = [
+    "requests>=2.0",
+]
+
+[project.entry-points."pretix.plugin"]
+pretix_waitinglistsms = "pretix_waitinglistsms:PretixPluginMeta"
+
+[project.entry-points."distutils.commands"]
+build = "pretix_plugin_build.build:CustomBuild"
+
+[build-system]
+requires = [
+    "setuptools",
+    "pretix-plugin-build",
+]
+
+[project.urls]
+homepage = "https://github.com/HansF/pretix-waitinglistsms"
+repository = "https://github.com/HansF/pretix-waitinglistsms"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "pretix_waitinglistsms.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["pretix*"]
+namespaces = false

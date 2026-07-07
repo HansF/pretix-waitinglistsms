@@ -1,0 +1,76 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n bootstrap3 %}
+
+{% block title %}{% trans "Waiting list SMS" %}{% endblock %}
+
+{% block inside %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+
+        <fieldset>
+            <legend>{% trans "Waiting list SMS" %}</legend>
+
+            {% bootstrap_field form.waitinglistsms_enabled layout="horizontal" %}
+
+            <div id="sms-provider-fields">
+                {% bootstrap_field form.waitinglistsms_provider layout="horizontal" %}
+
+                <div class="provider-specific" data-provider="pingram">
+                    {% bootstrap_field form.waitinglistsms_pingram_api_key layout="horizontal" %}
+                    {% bootstrap_field form.waitinglistsms_pingram_type layout="horizontal" %}
+                    {% bootstrap_field form.waitinglistsms_pingram_base_url layout="horizontal" %}
+                </div>
+
+                <div class="provider-specific" data-provider="twilio">
+                    {% bootstrap_field form.waitinglistsms_twilio_account_sid layout="horizontal" %}
+                    {% bootstrap_field form.waitinglistsms_twilio_auth_token layout="horizontal" %}
+                </div>
+
+                <div class="provider-specific" data-provider="webhook">
+                    {% bootstrap_field form.waitinglistsms_webhook_url layout="horizontal" %}
+                </div>
+
+                {% bootstrap_field form.waitinglistsms_from layout="horizontal" %}
+                {% bootstrap_field form.waitinglistsms_message layout="horizontal" %}
+            </div>
+        </fieldset>
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var enabledCheckbox = document.getElementById("id_waitinglistsms_enabled");
+            var providerSelect = document.getElementById("id_waitinglistsms_provider");
+            var providerFields = document.getElementById("sms-provider-fields");
+            var specificSections = document.querySelectorAll(".provider-specific");
+
+            function updateVisibility() {
+                if (!enabledCheckbox || !providerFields) {
+                    return;
+                }
+
+                providerFields.hidden = !enabledCheckbox.checked;
+                if (enabledCheckbox.checked) {
+                    var selectedProvider = providerSelect ? providerSelect.value : "";
+                    Array.prototype.forEach.call(specificSections, function(section) {
+                        section.hidden = section.getAttribute("data-provider") !== selectedProvider;
+                    });
+                }
+            }
+
+            if (enabledCheckbox) {
+                enabledCheckbox.addEventListener("change", updateVisibility);
+            }
+            if (providerSelect) {
+                providerSelect.addEventListener("change", updateVisibility);
+            }
+            updateVisibility();
+        });
+    </script>
+{% endblock %}
